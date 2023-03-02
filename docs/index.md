@@ -6,6 +6,10 @@ IT FDN 110
 
 Assignment07
 
+[Full Code](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Assignment07.py)
+
+[Original Knowledge Document](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/assignment07_knowledgedoc.pdf)
+
 # Pickling and Structured Error Handling
 
 ## Introduction
@@ -25,19 +29,72 @@ The python pickle module is used to serialize and de-serialize python objects. "
 
 To use the pickle module, it must be imported. At the beginning of the script type "import pickle" to load the pickle module. Next, to pickle your data and save it to a file you first open the file in binary write mode (using _open(file\_name, 'wb')_)then you use the command _pickle.dump(your\_data, file\_name)_ to pickle your data into a byte stream and write it to the file. For an example, see how Charlie Brown's teacher used python to pickle her grade book:
 
-![](RackMultipart20230302-1-jwzwc0_html_c2b0c1b57e7e2f37.png)
+```
+import pickle
+# Data ---------------------------------------------------------------------- #
+# Declare variables and constants
+GradeBook = [{'Name': 'Linus', 'Grade': 89.00},
+             {'Name': 'Lucy', 'Grade': 96.35},
+             {'Name': 'Sally', 'Grade': 92.27},
+             {'Name': 'Charlie Brown', 'Grade': 67.59},
+             {'Name': 'Snoopy', 'Grade': 100.00},
+             {'Name': 'Patty', 'Grade': 87.05},
+             {'Name': 'Marci', 'Grade': 98.23}]
+
+GradeBookFile = 'StudentGrades.pickle'
+
+
+# Processing  --------------------------------------------------------------- #
+def write_grades(data, file):
+    """  Serializes a msg in binary and uploads it to a file
+
+    :param data: {dict} with student grades data:
+    :param file: (string) containing name of the file:
+    :return nothing
+    """
+    with open(file, 'wb') as file:
+        pickle.dump(data, file)
+
+
+# Presentation (Input/Output)  -------------------------------------------- #
+write_grades(GradeBook, GradeBookFile)
+```
 
 When we open the pickled 'StudentGrades.pickle' file in a text editor this is what we see:
+![](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Picture1.png)
 
-![](RackMultipart20230302-1-jwzwc0_html_8a16138dfcf2f00c.png)
 
 ### Unpickling
 
 Unpickling works similarly to pickling. At the top of the script you must import the pickle module then open the file in binary read mode (using _open(file\_name, 'rb')_)and use the command _pickle.load(file\_name,)_ to read your data from the file and unpickle it from the byte stream. To unpickle his teachers grade file, Charlie Brown's Script needs to look like this:
 
-T ![](RackMultipart20230302-1-jwzwc0_html_15bd2effbca8e995.png) his code will read the pickled data and output it in the form that it was input. See the output:
+ ```
+ import pickle
+# Data ---------------------------------------------------------------------- #
+# Declare variables and constants
+GradeBookFile = 'StudentGrades.pickle'
 
-![](RackMultipart20230302-1-jwzwc0_html_1353ed02a928367d.png)
+
+# Processing  --------------------------------------------------------------- #
+def read_grades(file):
+    """  Deserializes a msg in binary
+
+    :param file: (string) containing name of the file:
+    :return data: (list) of dictionary rows
+    """
+    with open(file, 'rb') as file:
+        data = pickle.load(file)
+    return data
+
+
+# Presentation (Input/Output)  -------------------------------------------- #
+GradeBook = read_grades(GradeBookFile)
+print(GradeBook)
+```
+ 
+ This code will read the pickled data and output it in the form that it was input. See the output:
+
+![](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Picture2.png)
 
 ## Structured Error Handling
 
@@ -47,20 +104,57 @@ You may be wondering what happens if you try to unpickle a file by opening it in
 
 Structured error handling allows you to control what happens to your code if an error occurs by using a try-except block. This is what a try-except block looks like:
 
-![](RackMultipart20230302-1-jwzwc0_html_ca300c3ecfd8dd53.png)
+```
+try:
+    <some code>
+
+except:
+    <some other code>
+```
 
 Basically, this tells the program to try and run the first code. If that code causes an error, then run the second code instead. In the case of trying to read a pickled file we can handle the error like this:
 
-![](RackMultipart20230302-1-jwzwc0_html_5d9ca3d572347bc4.png)
+```
+import pickle
+# Data ---------------------------------------------------------------------- #
+# Declare variables and constants
+GradeBookFile = 'StudentGrades.pickle'
+
+
+# Processing  --------------------------------------------------------------- #
+def read_grades(file_name):
+    """  unpickles a binary file.
+
+    :param file_name: (string) containing name of the file:
+    :return data: (list) of dictionary rows with student grades
+    """
+    try:
+        print('*Trying to read the file as regular file.*')
+        with open(file_name, 'r') as file:
+            print(file.read())
+
+    except:
+        print('Error: data is in binary form!\n'
+              '*Now unpickling from binary form!*')
+        with open(file_name, 'rb') as file:
+            data = pickle.load(file)
+
+    return data
+
+
+# Presentation (Input/Output)  -------------------------------------------- #
+GradeBook = read_grades(GradeBookFile)
+print(GradeBook)
+```
 
 This will output the following:
 
-![](RackMultipart20230302-1-jwzwc0_html_87e5c5c31a94d5ca.png)
+![](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Picture3.png)
 
 ## Conclusion
 
 With this assignment I have explained and demonstrated Pickling and Structured Error Handling. I've combined code used in the examples above into one script to demonstrate how pickling and structured error handling can be used in tandem. First the code pickles the data and writes it to a file. Then it tries to read the file as a regular file and when that errors, it reads the file as a binary file. Finally, it unpickles the file and formats it in a way that is easy to read. See the output below.
 
- ![](RackMultipart20230302-1-jwzwc0_html_1e0f43c79e685231.png)
+ ![](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Picture4.png)
 
-![](RackMultipart20230302-1-jwzwc0_html_b50c90731b41a271.png)
+![](https://github.com/jjepson3/IntroToProg-Python-Mod07/blob/main/docs/Picture5.png)
